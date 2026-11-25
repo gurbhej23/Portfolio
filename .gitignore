@@ -1,0 +1,20 @@
+node_modules/
+dist/
+build/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+apps/server/uploads/*
+!apps/server/uploads/.gitkeep
+!apps/server/uploads/resumes/
+!apps/server/uploads/projects/
+!apps/server/uploads/profile/
+!apps/server/uploads/certifications/
+.DS_Store
+Thumbs.db
+
+# Local editor files
+.vscode/
+.idea/

@@ -1,0 +1,22 @@
+{
+  "name": "gurbhej-singh-portfolio",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Professional full-stack developer portfolio for Gurbhej Singh.",
+  "workspaces": [
+    "apps/client",
+    "apps/server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace apps/server\" \"npm run dev --workspace apps/client\"",
+    "dev:client": "npm run dev --workspace apps/client",
+    "dev:server": "npm run dev --workspace apps/server",
+    "test": "npm run test --workspace apps/server",
+    "check": "npm run test && npm run build",
+    "build": "npm run build --workspace apps/client",
+    "start": "npm run start --workspace apps/server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
