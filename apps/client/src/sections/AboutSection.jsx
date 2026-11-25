@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { BrainCircuit, Layers3, ServerCog, UserRound } from "lucide-react";
+import { BrainCircuit, Layers3, ServerCog } from "lucide-react";
 import Reveal from "../components/Reveal";
 import SectionHeading from "../components/SectionHeading";
 import PlaceholderText from "../components/PlaceholderText";
@@ -8,50 +7,9 @@ function AboutSection({ content }) {
   return (
     <section
       id="about"
-      className="scroll-mt-28 border-t border-white/10 px-6 pb-24 pt-14 sm:px-10 lg:px-16"
+      className="scroll-mt-28 border-t border-white/10 px-6 pb-14 pt-14 sm:px-10 lg:px-16"
     >
-      <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.68fr_1.32fr] lg:items-center lg:gap-24">
-        <Reveal>
-          <motion.div
-            whileHover={{ y: -4 }}
-            transition={{ duration: 0.25 }}
-            className="relative mx-auto w-full max-w-sm"
-          >
-            <div className="absolute -inset-5 rounded-[2rem] bg-gradient-to-br from-violet-500/20 via-transparent to-cyan-400/15 blur-2xl" />
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] p-3 shadow-2xl shadow-violet-950/30">
-              {content.profilePhotoUrl ? (
-                <img
-                  src={content.profilePhotoUrl}
-                  alt="Gurbhej Singh"
-                  loading="lazy"
-                  className="aspect-10 w-full rounded-3xl object-cover"
-                />
-              ) : (
-                <div className="relative flex aspect-4/5 flex-col items-center justify-center overflow-hidden rounded-3xl border border-dashed border-violet-200/30 bg-linear-to-br from-violet-950/80 via-slate-900 to-cyan-950/70">
-                  <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full border border-cyan-200/20" />
-                  <div className="absolute -bottom-20 -left-12 h-48 w-48 rounded-full border border-violet-200/20" />
-                  <div className="relative grid h-24 w-24 place-items-center rounded-[2rem] bg-gradient-to-br from-violet-300 to-cyan-200 text-3xl font-semibold text-slate-950 shadow-xl shadow-cyan-950/30">
-                    GS
-                  </div>
-                  <UserRound
-                    size={18}
-                    className="relative mt-8 text-cyan-200"
-                    aria-hidden="true"
-                  />
-                  <p className="relative mt-3 text-xs uppercase tracking-[0.2em] text-slate-400">
-                    Profile image placeholder
-                  </p>
-                </div>
-              )}
-              <div className="flex justify-center px-3 pb-2 pt-5 text-xs text-slate-500">
-                <h1 className="font-semibold text-slate-400 text-xl">
-                  Gurbhej Singh
-                </h1>
-              </div>
-            </div>
-          </motion.div>
-        </Reveal>
-
+      <div className="mx-auto max-w-7xl">
         <div>
           <Reveal>
             <SectionHeading
@@ -60,7 +18,7 @@ function AboutSection({ content }) {
               description="Frontend clarity and backend reliability are two parts of the same product experience."
             />
           </Reveal>
-          <div className="mt-10 grid gap-5 sm:grid-cols-2">
+          <div className="mt-5 grid gap-5 sm:grid-cols-2">
             <Reveal delay={0.08} className="h-full">
               <article className="h-full rounded-3xl border border-white/10 bg-white/[0.035] p-7">
                 <div className="flex items-center gap-3">

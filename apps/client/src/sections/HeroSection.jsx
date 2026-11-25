@@ -8,6 +8,8 @@ const iconMap = { Github, LinkedIn: Linkedin, Linkedin, Mail };
 function HeroSection({ content }) {
   const { hero, socialLinks, contact } = content;
   const reducedMotion = useReducedMotion();
+  const profilePhotoUrl = content.profilePhotoUrl || "";
+  const [photoError, setPhotoError] = useState(false);
   const roles = hero.roles?.length ? hero.roles : [hero.role];
   const [roleIndex, setRoleIndex] = useState(0);
   const [introductionExpanded, setIntroductionExpanded] = useState(false);
@@ -48,13 +50,18 @@ function HeroSection({ content }) {
     setIntroductionExpanded(false);
   }, [hero.introduction]);
 
+  useEffect(() => {
+    setPhotoError(false);
+  }, [profilePhotoUrl]);
+
   const currentRole = roles[roleIndex] || hero.role;
   const introduction = hero.introduction || "";
   const introductionLimit = 280;
   const introductionHasMore = introduction.length > introductionLimit;
-  const visibleIntroduction = introductionHasMore && !introductionExpanded
-    ? `${introduction.slice(0, introductionLimit).trimEnd()}…`
-    : introduction;
+  const visibleIntroduction =
+    introductionHasMore && !introductionExpanded
+      ? `${introduction.slice(0, introductionLimit).trimEnd()}…`
+      : introduction;
   const primaryCtaLabel = hero.primaryCtaLabel || "View Projects";
   const primaryCtaUrl = hero.primaryCtaUrl || "#projects";
   const primaryCtaIsExternal = /^https?:\/\//i.test(primaryCtaUrl);
@@ -116,7 +123,6 @@ function HeroSection({ content }) {
             transition={{ delay: 0.16 }}
             className="mt-5 flex min-h-12 flex-wrap items-center gap-3 text-2xl font-medium text-slate-300 sm:min-h-16 sm:text-4xl"
           >
-             
             {reducedMotion ? (
               <span
                 className={
@@ -153,7 +159,11 @@ function HeroSection({ content }) {
             transition={{ delay: 0.24 }}
             className="mt-8 max-w-2xl"
           >
-            <motion.div id="hero-introduction" layout transition={{ layout: { duration: 0.35, ease: "easeInOut" } }}>
+            <motion.div
+              id="hero-introduction"
+              layout
+              transition={{ layout: { duration: 0.35, ease: "easeInOut" } }}
+            >
               <AnimatePresence initial={false} mode="wait">
                 <motion.p
                   key={introductionExpanded ? "expanded" : "collapsed"}
@@ -169,7 +179,9 @@ function HeroSection({ content }) {
                       {" "}
                       <button
                         type="button"
-                        onClick={() => setIntroductionExpanded((expanded) => !expanded)}
+                        onClick={() =>
+                          setIntroductionExpanded((expanded) => !expanded)
+                        }
                         aria-expanded={introductionExpanded}
                         aria-controls="hero-introduction"
                         className="cursor-pointer font-semibold text-cyan-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-300/70 text-[1rem]"
@@ -248,44 +260,27 @@ function HeroSection({ content }) {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="relative mx-auto w-full max-w-sm"
         >
-          <div className="absolute -inset-5 rounded-[2rem] bg-gradient-to-br from-violet-500/20 via-transparent to-cyan-400/20 blur-2xl" />
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 shadow-2xl shadow-violet-950/30 backdrop-blur-sm">
-            <div className="flex items-center justify-between border-b border-white/10 pb-5">
-              <span className="font-mono text-xs text-slate-500">
-                /gurbhej/portfolio
-              </span>
-              <span
-                className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.85)]"
-                aria-hidden="true"
+          <div className="absolute -inset-5 rounded-4xl bg-linear-to-br from-violet-500/20 via-transparent to-cyan-400/20 blur-2xl" />
+          <div className="relative overflow-hidden rounded-4xl border border-white/10 bg-white/4.5 p-3 shadow-2xl shadow-violet-950/30 backdrop-blur-sm">
+            {profilePhotoUrl && !photoError ? (
+              <img
+                src={profilePhotoUrl}
+                alt="Gurbhej Singh"
+                onError={() => setPhotoError(true)}
+                className="aspect-4/5 w-full rounded-3xl object-cover"
               />
-            </div>
-            <div className="py-10">
-              <p className="font-mono text-xs uppercase tracking-[0.25em] text-violet-300">
-                Stack focus
-              </p>
-              <div className="mt-5 space-y-4 font-mono text-sm text-slate-300">
-                {["Python", "React", "Node.js", "MongoDB"].map(
-                  (item, index) => (
-                    <motion.div
-                      key={item}
-                      initial={{ opacity: 0, x: 12 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.45 + index * 0.08 }}
-                      className="flex items-center justify-between border-b border-white/5 pb-3"
-                    >
-                      <span>{item}</span>
-                      <span className="text-xs text-cyan-300">
-                        0{index + 1}
-                      </span>
-                    </motion.div>
-                  ),
-                )}
+            ) : (
+              <div className="relative flex aspect-[4/5] flex-col items-center justify-center overflow-hidden rounded-[1.5rem] border border-dashed border-violet-200/30 bg-gradient-to-br from-violet-950/80 via-slate-900 to-cyan-950/70">
+                <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full border border-cyan-200/20" />
+                <div className="absolute -bottom-20 -left-12 h-48 w-48 rounded-full border border-violet-200/20" />
+                <div className="relative grid h-24 w-24 place-items-center rounded-[2rem] bg-gradient-to-br from-violet-300 to-cyan-200 text-3xl font-semibold text-slate-950 shadow-xl shadow-cyan-950/30">
+                  GS
+                </div>
+                <p className="relative mt-6 text-xs uppercase tracking-[0.2em] text-slate-400">
+                  Profile image
+                </p>
               </div>
-            </div>
-            <div className="flex items-center justify-between text-xs text-slate-500">
-              <span>Build with intention</span>
-              <ArrowDown size={15} aria-hidden="true" />
-            </div>
+            )}
           </div>
         </motion.div>
       </div>

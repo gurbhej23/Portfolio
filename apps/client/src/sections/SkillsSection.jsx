@@ -15,22 +15,11 @@ import {
 import Reveal from "../components/Reveal";
 import SectionHeading from "../components/SectionHeading";
 
-const categoryOrder = [
-  "Programming",
-  "Frontend",
-  "Backend",
-  "Database",
-  "Tools",
-  "Other",
-];
+function getSkillCategory(skill) {
+  return String(skill?.category || "Other").trim() || "Other";
+}
 
 const categoryMeta = {
-  Programming: {
-    icon: Braces,
-    accent: "text-violet-200",
-    badge: "bg-violet-500/15",
-    description: "Languages for building logic and products.",
-  },
   Frontend: {
     icon: Monitor,
     accent: "text-cyan-200",
@@ -49,11 +38,23 @@ const categoryMeta = {
     badge: "bg-emerald-500/15",
     description: "Data storage and application persistence.",
   },
+  "Python Libraries": {
+    icon: Braces,
+    accent: "text-violet-200",
+    badge: "bg-violet-500/15",
+    description: "Python tools and libraries for building solutions.",
+  },
   Tools: {
     icon: Wrench,
     accent: "text-amber-200",
     badge: "bg-amber-500/15",
     description: "Tools for shipping, testing, and collaboration.",
+  },
+  Others: {
+    icon: BrainCircuit,
+    accent: "text-rose-200",
+    badge: "bg-rose-500/15",
+    description: "Supporting technologies and focused interests.",
   },
   Other: {
     icon: BrainCircuit,
@@ -87,17 +88,22 @@ const skillIcons = {
 };
 
 function SkillsSection({ skills }) {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("");
   const categories = useMemo(() => {
-    const available = new Set(skills.map((skill) => skill.category || "Other"));
-    return categoryOrder.filter((category) => available.has(category));
+    const seen = new Set();
+    return skills
+      .map(getSkillCategory)
+      .filter((category) => {
+        if (seen.has(category)) return false;
+        seen.add(category);
+        return true;
+      });
   }, [skills]);
-  const visibleSkills =
-    activeCategory === "All"
-      ? skills
-      : skills.filter(
-          (skill) => (skill.category || "Other") === activeCategory,
-        );
+  const selectedCategory = categories.includes(activeCategory)
+    ? activeCategory
+    : categories[0];
+  const filteredSkills =
+    skills.filter((skill) => getSkillCategory(skill) === selectedCategory);
 
   return (
     <section
@@ -115,27 +121,18 @@ function SkillsSection({ skills }) {
 
         <Reveal delay={0.08}>
           <div
-            className="mt-10 flex flex-wrap gap-2"
             role="tablist"
             aria-label="Technical skill categories"
+            className="mt-8 flex flex-wrap gap-2 text-sm font-medium"
           >
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeCategory === "All"}
-              onClick={() => setActiveCategory("All")}
-              className={`rounded-full border px-4 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 ${activeCategory === "All" ? "border-cyan-200/50 bg-cyan-200/10 text-cyan-100" : "border-white/10 text-slate-400 hover:border-white/25 hover:text-white"}`}
-            >
-              All skills
-            </button>
             {categories.map((category) => (
               <button
                 type="button"
                 role="tab"
-                aria-selected={activeCategory === category}
+                aria-selected={selectedCategory === category}
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`rounded-full border px-4 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 ${activeCategory === category ? "border-violet-200/50 bg-violet-200/10 text-violet-100" : "border-white/10 text-slate-400 hover:border-white/25 hover:text-white"}`}
+                className={`rounded-full border px-4 py-2 text-sm capitalize transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 ${selectedCategory === category ? "border-violet-200/50 bg-violet-200/10 text-violet-100" : "border-white/10 text-slate-400 hover:border-white/25 hover:text-white cursor-pointer"}`}
               >
                 {category}
               </button>
@@ -146,11 +143,12 @@ function SkillsSection({ skills }) {
         <AnimatePresence mode="popLayout">
           <motion.div
             layout
+            id="skills-grid"
             className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {visibleSkills.map((skill, index) => {
-              const category = skill.category || "Other";
-              const meta = categoryMeta[category] || categoryMeta.Other;
+            {filteredSkills.map((skill, index) => {
+              const category = getSkillCategory(skill);
+              const meta = categoryMeta[category] || categoryMeta.Others;
               const CategoryIcon = meta.icon;
               const SkillIcon = skillIcons[skill.name] || CategoryIcon;
               return (
