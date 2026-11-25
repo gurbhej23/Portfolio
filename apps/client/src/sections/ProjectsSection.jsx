@@ -37,36 +37,7 @@ function ProjectsSection({ projects }) {
             title="Projects with a point of view."
             description="A focused collection of systems and interfaces. Repository and deployment links appear only when real URLs are available."
           />
-        </Reveal>
-        <Reveal delay={0.08}>
-          <div
-            className="mt-10 flex flex-wrap gap-2"
-            role="tablist"
-            aria-label="Project categories"
-          >
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeCategory === "All"}
-              onClick={() => setActiveCategory("All")}
-              className={`rounded-full border px-4 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 ${activeCategory === "All" ? "border-cyan-200/50 bg-cyan-200/10 text-cyan-100" : "border-white/10 text-slate-400 hover:border-white/25 hover:text-white"}`}
-            >
-              All projects
-            </button>
-            {categories.map((category) => (
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeCategory === category}
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`rounded-full border px-4 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70 ${activeCategory === category ? "border-violet-200/50 bg-violet-200/10 text-violet-100" : "border-white/10 text-slate-400 hover:border-white/25 hover:text-white"}`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </Reveal>
+        </Reveal> 
         <motion.div layout className="mt-10 grid gap-6 lg:grid-cols-2">
           {visibleProjects.map((project, index) => (
             <ProjectCard

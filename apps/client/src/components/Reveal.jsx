@@ -1,6 +1,6 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from "framer-motion";
 
-function Reveal({ children, className = '', delay = 0 }) {
+function Reveal({ children, className = "", delay = 0 }) {
   const reducedMotion = useReducedMotion();
 
   return (
