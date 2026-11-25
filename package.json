@@ -16,6 +16,9 @@
     "build": "npm run build --workspace apps/client",
     "start": "npm run start --workspace apps/server"
   },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
   "devDependencies": {
     "concurrently": "^9.1.2"
   }
