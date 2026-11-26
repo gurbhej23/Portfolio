@@ -6,8 +6,17 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import usePortfolio from "./hooks/usePortfolio";
 import PortfolioPage from "./pages/PortfolioPage";
 
-const AdminLoginPage = lazy(() => import("./pages/AdminLoginPage"));
-const AdminDashboardPage = lazy(() => import("./pages/AdminDashboardPage"));
+function lazyWithReload(componentImport) {
+  return lazy(() =>
+    componentImport().catch((error) => {
+      window.location.reload();
+      return new Promise(() => {});
+    })
+  );
+}
+
+const AdminLoginPage = lazyWithReload(() => import("./pages/AdminLoginPage"));
+const AdminDashboardPage = lazyWithReload(() => import("./pages/AdminDashboardPage"));
 
 function RouteFallback() {
   return (
