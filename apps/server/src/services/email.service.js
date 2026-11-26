@@ -4,7 +4,7 @@ import { env } from '../config/env.js';
 let transporter;
 
 function getTransporter() {
-  if (!env.SMTP_HOST || !env.SMTP_USER || !env.SMTP_PASSWORD || !env.CONTACT_RECEIVER) return null;
+  if (!env.SMTP_HOST || !env.SMTP_USER || !env.SMTP_PASSWORD) return null;
   if (!transporter) {
     transporter = nodemailer.createTransport({
       host: env.SMTP_HOST,
