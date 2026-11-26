@@ -10,12 +10,30 @@ import { uploadsDirectory } from './config/uploads.js';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware.js';
 import apiRoutes from './routes/index.js';
 
+const isOriginAllowed = (origin) => {
+  if (!origin) return true;
+  if (origin === env.CLIENT_ORIGIN) return true;
+  if (/^https:\/\/[a-z0-9._-]+\.vercel\.app$/i.test(origin)) return true;
+  return false;
+};
+
 const app = express();
 
 app.disable('x-powered-by');
 app.set('trust proxy', env.NODE_ENV === 'production' ? 1 : false);
 app.use(helmet());
-app.use(cors({ origin: env.CLIENT_ORIGIN, credentials: true }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (isOriginAllowed(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, false);
+      }
+    },
+    credentials: true,
+  }),
+);
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
