@@ -18,6 +18,7 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(32).default('development-only-secret-change-me-please'),
   JWT_EXPIRES_IN: z.string().default('1d'),
   COOKIE_NAME: z.string().min(1).default('portfolio_token'),
+  RESEND_API_KEY: optionalString,
   SMTP_HOST: optionalString,
   SMTP_PORT: z.coerce.number().int().positive().default(587),
   SMTP_USER: optionalString,

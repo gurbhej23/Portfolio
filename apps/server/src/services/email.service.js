@@ -19,9 +19,51 @@ function getTransporter() {
   return transporter;
 }
 
+async function sendViaResend({ to, from, subject, text, replyTo }) {
+  if (!env.RESEND_API_KEY) return null;
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: from || env.SMTP_FROM || 'Portfolio <onboarding@resend.dev>',
+        to: Array.isArray(to) ? to : [to],
+        reply_to: replyTo,
+        subject,
+        text,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Resend API error');
+    return { status: 'sent', error: '' };
+  } catch (error) {
+    console.error('Resend delivery failed:', error.message);
+    return { status: 'failed', error: error.message.slice(0, 500) };
+  }
+}
+
 export async function sendContactNotification(contactMessage) {
+  if (env.RESEND_API_KEY && env.CONTACT_RECEIVER) {
+    return sendViaResend({
+      to: env.CONTACT_RECEIVER,
+      replyTo: contactMessage.email,
+      subject: `[Portfolio contact] ${contactMessage.subject || 'New message'}`,
+      text: [
+        `Name: ${contactMessage.name}`,
+        `Email: ${contactMessage.email}`,
+        `Subject: ${contactMessage.subject || '(none)'}`,
+        '',
+        contactMessage.message,
+      ].join('\n'),
+    });
+  }
+
   const mailTransporter = getTransporter();
-  if (!mailTransporter) return { status: 'not_configured', error: '' };
+  if (!mailTransporter || !env.CONTACT_RECEIVER) return { status: 'not_configured', error: '' };
 
   try {
     await mailTransporter.sendMail({
@@ -45,6 +87,17 @@ export async function sendContactNotification(contactMessage) {
 }
 
 export async function sendReplyEmail({ to, subject, replyText, originalMessage }) {
+  const emailSubject = subject && subject.startsWith('Re:') ? subject : `Re: ${subject || 'Portfolio message'}`;
+  const fullText = [replyText, '', '--- Original Message ---', originalMessage].join('\n');
+
+  if (env.RESEND_API_KEY) {
+    return sendViaResend({
+      to,
+      subject: emailSubject,
+      text: fullText,
+    });
+  }
+
   const mailTransporter = getTransporter();
   if (!mailTransporter) return { status: 'not_configured', error: '' };
 
@@ -52,13 +105,8 @@ export async function sendReplyEmail({ to, subject, replyText, originalMessage }
     await mailTransporter.sendMail({
       from: env.SMTP_FROM || env.SMTP_USER,
       to,
-      subject: subject && subject.startsWith('Re:') ? subject : `Re: ${subject || 'Portfolio message'}`,
-      text: [
-        replyText,
-        '',
-        '--- Original Message ---',
-        originalMessage,
-      ].join('\n'),
+      subject: emailSubject,
+      text: fullText,
     });
     return { status: 'sent', error: '' };
   } catch (error) {

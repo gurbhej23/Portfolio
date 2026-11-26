@@ -95,6 +95,18 @@ function MessagesPanel({ messages, onReload }) {
     return `mailto:${message.email}?subject=${subject}&body=${body}`;
   }
 
+  function getGmailHref(message) {
+    const subject = encodeURIComponent(
+      message.subject?.startsWith('Re:')
+        ? message.subject
+        : `Re: ${message.subject || 'Portfolio message'}`
+    );
+    const body = encodeURIComponent(
+      `Hi ${message.name},\n\nThank you for reaching out!\n\nBest regards,\nGurbhej Singh\n\n--- Original Message ---\n${message.message}`
+    );
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(message.email)}&su=${subject}&body=${body}`;
+  }
+
   return (
     <section className="rounded-3xl border border-white/10 bg-white/[0.035] p-6">
       <div className="flex items-start justify-between gap-4">
@@ -173,6 +185,22 @@ function MessagesPanel({ messages, onReload }) {
                       ))}
                     </select>
 
+                    <a
+                      href={getGmailHref(message)}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => {
+                        if (message.status !== 'replied') {
+                          updateStatus(message._id, 'replied');
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-medium text-red-200 transition hover:bg-red-500/20 hover:text-white"
+                      title="Open directly in Gmail web with pre-filled reply"
+                    >
+                      <Mail size={13} aria-hidden="true" />
+                      Reply in Gmail
+                    </a>
+
                     <button
                       type="button"
                       onClick={() => handleOpenReply(message)}
@@ -183,7 +211,7 @@ function MessagesPanel({ messages, onReload }) {
                       }`}
                     >
                       <CornerDownLeft size={13} aria-hidden="true" />
-                      {isReplying ? 'Close' : 'Reply'}
+                      {isReplying ? 'Close' : 'Quick Reply'}
                     </button>
                   </div>
                 </div>
