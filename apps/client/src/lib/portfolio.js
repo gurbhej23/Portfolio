@@ -52,6 +52,22 @@ const defaultIntroduction = 'Full-Stack Developer focused on building thoughtful
 const defaultAboutSummary = 'I am a Full-Stack Developer interested in building reliable backend systems and clear, responsive frontend experiences.';
 const defaultJourney = 'My journey is shaped by curiosity, hands-on learning, and a practical problem-solving approach: understand the problem, break it down, and build with clarity.';
 
+export function resolveMediaUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  const rawApi = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL)
+    ? import.meta.env.VITE_API_URL
+    : (typeof process !== 'undefined' && process.env && process.env.PUBLIC_API_URL) || 'http://localhost:5000/api';
+  const serverOrigin = rawApi.replace(/\/api\/?$/, '').replace(/\/+$/, '');
+
+  if (url.includes('localhost:5000')) {
+    return url.replace(/^https?:\/\/localhost:5000/i, serverOrigin);
+  }
+  if (url.startsWith('/uploads/')) {
+    return `${serverOrigin}${url}`;
+  }
+  return url;
+}
+
 export function normalizePortfolio(payload = {}) {
   const content = payload.content || {};
   const hero = content.hero || {};
@@ -74,15 +90,21 @@ export function normalizePortfolio(payload = {}) {
         journey: about.journey || defaultJourney,
       },
       contact,
-      resumeUrl: content.resumeUrl || '',
-      profilePhotoUrl: content.profilePhotoUrl || '',
+      resumeUrl: resolveMediaUrl(content.resumeUrl || ''),
+      profilePhotoUrl: resolveMediaUrl(content.profilePhotoUrl || ''),
       socialLinks: content.socialLinks || [],
     },
-    projects: payload.projects?.length ? payload.projects : fallbackProjects,
+    projects: (payload.projects?.length ? payload.projects : fallbackProjects).map((project) => ({
+      ...project,
+      imageUrl: resolveMediaUrl(project.imageUrl),
+    })),
     skills: payload.skills?.length ? payload.skills : fallbackSkills,
     experience: payload.experience || [],
     education: payload.education || [],
-    certifications: payload.certifications || [],
+    certifications: (payload.certifications || []).map((cert) => ({
+      ...cert,
+      attachmentUrl: resolveMediaUrl(cert.attachmentUrl),
+    })),
   };
 }
 
