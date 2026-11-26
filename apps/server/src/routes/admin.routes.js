@@ -8,12 +8,12 @@ import { getDashboardStats } from '../controllers/admin-dashboard.controller.js'
 import { getContent, updateContent } from '../controllers/admin-content.controller.js';
 import { uploadCertificationAttachment, uploadProfilePhoto, uploadProjectImage } from '../controllers/admin-media.controller.js';
 import { uploadResumeFile } from '../controllers/admin-resume.controller.js';
-import { listMessages, updateMessageStatus } from '../controllers/admin-message.controller.js';
+import { listMessages, replyMessage, updateMessageStatus } from '../controllers/admin-message.controller.js';
 import { resumeUpload } from '../middleware/resume-upload.middleware.js';
 import { profilePhotoUpload, projectImageUpload } from '../middleware/image-upload.middleware.js';
 import { certificateUpload } from '../middleware/certificate-upload.middleware.js';
 import { projectBodySchema, projectUpdateSchema } from '../validators/project.validator.js';
-import { certificationBodySchema, educationBodySchema, experienceBodySchema, messageQuerySchema, messageStatusSchema, portfolioContentBodySchema, skillBodySchema } from '../validators/admin.validator.js';
+import { certificationBodySchema, educationBodySchema, experienceBodySchema, messageQuerySchema, messageReplySchema, messageStatusSchema, portfolioContentBodySchema, skillBodySchema } from '../validators/admin.validator.js';
 
 const router = Router();
 router.use(authenticate, authorize('admin', 'editor'));
@@ -49,5 +49,6 @@ router.post('/certifications/:id/attachment', certificateUpload.single('certific
 
 router.get('/messages', validateQuery(messageQuerySchema), asyncHandler(listMessages));
 router.patch('/messages/:id/status', validateBody(messageStatusSchema), asyncHandler(updateMessageStatus));
+router.post('/messages/:id/reply', validateBody(messageReplySchema), asyncHandler(replyMessage));
 
 export default router;

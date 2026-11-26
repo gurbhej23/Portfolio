@@ -7,7 +7,7 @@ import { AppError } from '../utils/app-error.js';
 const cookieOptions = {
   httpOnly: true,
   secure: env.NODE_ENV === 'production',
-  sameSite: 'lax',
+  sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
   maxAge: 24 * 60 * 60 * 1000,
 };
 
@@ -26,15 +26,20 @@ export async function login(req, res) {
 
   if (!user || !validPassword) throw new AppError('Invalid email or password.', 401);
 
+  const token = issueToken(user);
   res.set('Cache-Control', 'no-store');
-  res.cookie(env.COOKIE_NAME, issueToken(user), cookieOptions);
-  res.json({ success: true, data: { user: serializeUser(user) } });
+  res.cookie(env.COOKIE_NAME, token, cookieOptions);
+  res.json({ success: true, data: { user: serializeUser(user), token } });
 }
 
 export async function logout(req, res) {
   await AdminUser.findByIdAndUpdate(req.user._id, { $inc: { tokenVersion: 1 } });
   res.set('Cache-Control', 'no-store');
-  res.clearCookie(env.COOKIE_NAME, { httpOnly: true, secure: env.NODE_ENV === 'production', sameSite: 'lax' });
+  res.clearCookie(env.COOKIE_NAME, {
+    httpOnly: true,
+    secure: env.NODE_ENV === 'production',
+    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+  });
   res.json({ success: true, data: { message: 'Logged out successfully.' } });
 }
 

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { contactBodySchema } from '../src/validators/contact.validator.js';
 import { loginBodySchema } from '../src/validators/auth.validator.js';
 import { projectBodySchema, projectQuerySchema } from '../src/validators/project.validator.js';
+import { messageReplySchema } from '../src/validators/admin.validator.js';
 
 test('contact validation accepts a complete message and applies defaults', () => {
   const result = contactBodySchema.parse({
@@ -61,4 +62,12 @@ test('project validation derives internal fields for the simplified admin form',
 test('project query validation only accepts supported filters', () => {
   assert.deepEqual(projectQuerySchema.parse({ featured: 'true' }), { featured: 'true' });
   assert.throws(() => projectQuerySchema.parse({ featured: 'yes' }));
+});
+
+test('message reply validation accepts non-empty reply text and rejects blank', () => {
+  assert.deepEqual(messageReplySchema.parse({ replyText: ' Thank you for your inquiry. ' }), {
+    replyText: 'Thank you for your inquiry.',
+  });
+  assert.throws(() => messageReplySchema.parse({ replyText: '' }));
+  assert.throws(() => messageReplySchema.parse({ replyText: '   ' }));
 });

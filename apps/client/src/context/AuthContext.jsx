@@ -11,7 +11,12 @@ export function AuthProvider({ children }) {
     let active = true;
     api.get('/auth/me')
       .then((response) => { if (active) setUser(response.data?.data?.user || null); })
-      .catch(() => { if (active) setUser(null); })
+      .catch(() => {
+        if (active) {
+          if (typeof window !== 'undefined') localStorage.removeItem('portfolio_token');
+          setUser(null);
+        }
+      })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
   }, []);
@@ -21,11 +26,23 @@ export function AuthProvider({ children }) {
     loading,
     async login(email, password) {
       const response = await api.post('/auth/login', { email, password });
-      setUser(response.data?.data?.user || null);
-      return response.data?.data?.user;
+      const loggedInUser = response.data?.data?.user || null;
+      const token = response.data?.data?.token;
+      if (token && typeof window !== 'undefined') {
+        localStorage.setItem('portfolio_token', token);
+      }
+      setUser(loggedInUser);
+      return loggedInUser;
     },
     async logout() {
-      try { await api.post('/auth/logout'); } catch { /* Clear local auth state even if the token already expired. */ } finally { setUser(null); }
+      try {
+        await api.post('/auth/logout');
+      } catch {
+        /* Clear local auth state even if the token already expired. */
+      } finally {
+        if (typeof window !== 'undefined') localStorage.removeItem('portfolio_token');
+        setUser(null);
+      }
     },
   }), [loading, user]);
 

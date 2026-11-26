@@ -43,3 +43,26 @@ export async function sendContactNotification(contactMessage) {
     return { status: 'failed', error: error.message.slice(0, 500) };
   }
 }
+
+export async function sendReplyEmail({ to, subject, replyText, originalMessage }) {
+  const mailTransporter = getTransporter();
+  if (!mailTransporter) return { status: 'not_configured', error: '' };
+
+  try {
+    await mailTransporter.sendMail({
+      from: env.SMTP_FROM || env.SMTP_USER,
+      to,
+      subject: subject && subject.startsWith('Re:') ? subject : `Re: ${subject || 'Portfolio message'}`,
+      text: [
+        replyText,
+        '',
+        '--- Original Message ---',
+        originalMessage,
+      ].join('\n'),
+    });
+    return { status: 'sent', error: '' };
+  } catch (error) {
+    console.error('Reply email failed:', error.message);
+    return { status: 'failed', error: error.message.slice(0, 500) };
+  }
+}

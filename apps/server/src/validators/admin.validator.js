@@ -84,3 +84,7 @@ export const messageQuerySchema = z.object({
 export const messageStatusSchema = z.object({
   status: z.enum(['new', 'read', 'replied', 'archived']),
 });
+
+export const messageReplySchema = z.object({
+  replyText: z.string().trim().min(1, 'Reply message cannot be empty.').max(5000),
+});
