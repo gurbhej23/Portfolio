@@ -123,7 +123,7 @@ function ContactSection({ contact }) {
   return (
     <section
       id="contact"
-      className="scroll-mt-28 border-t border-white/10 px-6 py-24 sm:px-10 lg:px-16 lg:py-15"
+      className="scroll-mt-28 border-t border-white/10 px-4 py-16 sm:px-6 sm:py-20 lg:px-16 lg:py-24"
     >
       <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.75fr_1.25fr] lg:gap-24">
         <Reveal>
@@ -171,7 +171,7 @@ function ContactSection({ contact }) {
           <form
             onSubmit={handleSubmit}
             noValidate
-            className="rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 sm:p-8"
+            className="rounded-[2rem] border border-white/10 bg-white/[0.035] p-5 sm:p-8"
           >
             <div className="grid gap-5 sm:grid-cols-2">
               <ContactField

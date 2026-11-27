@@ -2,7 +2,7 @@ import { ArrowUp, Heart } from "lucide-react";
 
 function Footer() {
   return (
-    <footer className="border-t border-white/10 px-6 py-8 sm:px-10 lg:px-16">
+    <footer className="border-t border-white/10 px-4 py-8 sm:px-10 lg:px-16">
       <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 text-xs text-slate-500 sm:flex-row sm:items-center">
         <p>
           © {new Date().getFullYear()} Gurbhej Singh. Built with{" "}

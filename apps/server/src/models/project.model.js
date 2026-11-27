@@ -29,18 +29,79 @@ const projectSchema = new mongoose.Schema(
       trim: true,
       maxlength: 300,
     },
+    shortDescription: {
+      type: String,
+      trim: true,
+      maxlength: 300,
+      default: '',
+    },
     description: {
       type: String,
       required: true,
       trim: true,
       maxlength: 5000,
     },
+    fullDescription: {
+      type: String,
+      trim: true,
+      maxlength: 5000,
+      default: '',
+    },
+    overview: {
+      type: String,
+      trim: true,
+      maxlength: 3000,
+      default: '',
+    },
+    problem: {
+      type: String,
+      trim: true,
+      maxlength: 3000,
+      default: '',
+    },
+    solutions: {
+      type: [String],
+      default: [],
+    },
+    role: {
+      type: String,
+      trim: true,
+      maxlength: 1000,
+      default: '',
+    },
+    contributions: {
+      type: [String],
+      default: [],
+    },
+    challenges: {
+      type: String,
+      trim: true,
+      maxlength: 3000,
+      default: '',
+    },
+    learnings: {
+      type: [String],
+      default: [],
+    },
     imageUrl: {
       type: String,
       trim: true,
       default: '',
     },
+    thumbnail: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    images: {
+      type: [String],
+      default: [],
+    },
     technologies: {
+      type: [String],
+      default: [],
+    },
+    features: {
       type: [String],
       default: [],
     },
@@ -50,6 +111,11 @@ const projectSchema = new mongoose.Schema(
       default: '',
     },
     liveUrl: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    liveDemoUrl: {
       type: String,
       trim: true,
       default: '',

@@ -64,6 +64,31 @@ a {
   border-color: rgb(103 232 249 / 0.6);
 }
 
+.modal-scrollbar {
+  scrollbar-color: rgb(129 140 248 / 0.65) rgb(255 255 255 / 0.06);
+  scrollbar-width: thin;
+}
+
+.modal-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-track {
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.06);
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgb(167 139 250 / 0.85), rgb(103 232 249 / 0.8)) padding-box;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgb(196 181 253 / 0.95), rgb(165 243 252 / 0.95)) padding-box;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

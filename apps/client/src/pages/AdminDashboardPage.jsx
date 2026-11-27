@@ -24,10 +24,10 @@ import ResourcePanel from "../components/admin/ResourcePanel";
 import ContentPanel from "../components/admin/ContentPanel";
 import MessagesPanel from "../components/admin/MessagesPanel";
 
-async function uploadProjectImage(projectId, file) {
+async function uploadProjectImages(projectId, files) {
   const formData = new FormData();
-  formData.append("image", file);
-  return api.post(`/admin/projects/${projectId}/image`, formData, {
+  files.forEach((file) => formData.append("images", file));
+  return api.post(`/admin/projects/${projectId}/images`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 }
@@ -59,16 +59,31 @@ const resourceConfigs = {
         type: "textarea",
         required: true,
       },
+      { name: "shortDescription", label: "Short description", type: "textarea" },
+      { name: "fullDescription", label: "Full description", type: "textarea" },
+      { name: "overview", label: "Project overview", type: "textarea" },
+      { name: "problem", label: "Problem", type: "textarea" },
+      { name: "solutions", label: "Solutions", type: "array" },
+      { name: "features", label: "Key features", type: "array" },
+      { name: "role", label: "My role and contributions", type: "textarea" },
+      { name: "contributions", label: "Contribution list", type: "array" },
+      { name: "challenges", label: "Challenges", type: "textarea" },
+      { name: "learnings", label: "Learnings", type: "array" },
       {
         name: "imageUrl",
-        label: "Screenshot",
+        label: "Project screenshots",
         type: "file",
+        multiple: true,
         accept: "image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp",
-        upload: uploadProjectImage,
+        helpText: "Select multiple JPG, PNG, or WebP screenshots; maximum 10 files, 5 MB each.",
+        upload: uploadProjectImages,
       },
+      { name: "thumbnail", label: "Thumbnail URL", type: "text" },
+      { name: "images", label: "Additional screenshot URLs", type: "array" },
       { name: "technologies", label: "Technologies", type: "array" },
       { name: "githubUrl", label: "GitHub URL", type: "url" },
       { name: "liveUrl", label: "Live URL", type: "url" },
+      { name: "liveDemoUrl", label: "Live demo URL", type: "url" },
     ],
   },
   skills: {

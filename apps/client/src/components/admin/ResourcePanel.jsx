@@ -32,7 +32,7 @@ function payloadFromForm(form, fields) {
 function Field({ field, value, onChange }) {
   if (field.type === 'checkbox') return <label className="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-300"><input type="checkbox" name={field.name} checked={Boolean(value)} onChange={onChange} className="h-4 w-4 accent-cyan-300" />{field.label}</label>;
   if (field.type === 'select') return <label className="grid gap-2 text-sm text-slate-300">{field.label}<select name={field.name} value={value} onChange={onChange} required={field.required} className="rounded-xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white outline-none focus:border-cyan-300/60">{field.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>;
-  if (field.type === 'file') return <label className="grid gap-2 text-sm text-slate-300">{field.label}<span className="text-xs text-slate-500">{field.helpText || 'JPG, PNG, or WebP; maximum 5 MB.'}</span><input type="file" name={field.name} accept={field.accept} onChange={onChange} className="block w-full text-xs text-slate-400 file:mr-3 file:rounded-full file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-white/15" />{typeof value === 'string' && value && <a href={value} target="_blank" rel="noreferrer" className="text-xs text-cyan-200 hover:text-white">{field.currentLabel || 'View current file'}</a>}</label>;
+  if (field.type === 'file') return <label className="grid gap-2 text-sm text-slate-300">{field.label}<span className="text-xs text-slate-500">{field.helpText || 'JPG, PNG, or WebP; maximum 5 MB.'}</span><input type="file" name={field.name} accept={field.accept} multiple={field.multiple} onChange={onChange} className="block w-full text-xs text-slate-400 file:mr-3 file:rounded-full file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-white/15" />{typeof value === 'string' && value && <a href={value} target="_blank" rel="noreferrer" className="text-xs text-cyan-200 hover:text-white">{field.currentLabel || 'View current file'}</a>}</label>;
   const Input = field.type === 'textarea' ? 'textarea' : 'input';
   return <label className="grid gap-2 text-sm text-slate-300">{field.label}{field.type === 'array' && <span className="text-xs text-slate-500">Comma-separated values</span>}<Input type={field.type === 'number' ? 'number' : field.type === 'url' ? 'url' : 'text'} name={field.name} value={value} onChange={onChange} required={field.required} min={field.min} max={field.max} rows={field.type === 'textarea' ? 4 : undefined} placeholder={field.placeholder} className="rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-300/60" /></label>;
 }
@@ -46,7 +46,7 @@ function ResourcePanel({ resource, title, description, records, fields, onReload
 
   function startNew() { setEditing(null); setForm(formFromRecord(null, fields)); setState({ loading: false, error: '' }); }
   function startEdit(record) { setEditing(record); setForm(formFromRecord(record, fields)); setState({ loading: false, error: '' }); }
-  function updateField(event) { const { name, type, checked, value, files } = event.target; setForm((current) => ({ ...current, [name]: type === 'checkbox' ? checked : type === 'file' ? files?.[0] || null : value })); }
+  function updateField(event) { const { name, type, checked, value, files } = event.target; setForm((current) => ({ ...current, [name]: type === 'checkbox' ? checked : type === 'file' ? (event.target.multiple ? Array.from(files || []) : files?.[0] || null) : value })); }
 
   async function submit(event) {
     event.preventDefault();
@@ -56,7 +56,13 @@ function ResourcePanel({ resource, title, description, records, fields, onReload
       const response = editing?._id ? await api.put(`/admin/${resource}/${editing._id}`, payload) : await api.post(`/admin/${resource}`, payload);
       const savedRecord = response.data?.data;
       const fileField = fields.find((field) => field.type === 'file' && typeof field.upload === 'function');
-      if (fileField && form[fileField.name] && savedRecord?._id) await fileField.upload(savedRecord._id, form[fileField.name]);
+      if (fileField && savedRecord?._id) {
+        const files = form[fileField.name];
+        const hasSelectedFiles = fileField.multiple
+          ? Array.isArray(files) && files.length > 0
+          : Boolean(files) && typeof files !== 'string';
+        if (hasSelectedFiles) await fileField.upload(savedRecord._id, files);
+      }
       setEditing(null);
       setState({ loading: false, error: '' });
       await onReload();

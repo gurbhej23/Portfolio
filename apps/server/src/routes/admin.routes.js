@@ -6,7 +6,7 @@ import { Project, Skill, Experience, Education, Certification } from '../models/
 import { createCrudHandlers } from '../controllers/admin-crud.controller.js';
 import { getDashboardStats } from '../controllers/admin-dashboard.controller.js';
 import { getContent, updateContent } from '../controllers/admin-content.controller.js';
-import { uploadCertificationAttachment, uploadProfilePhoto, uploadProjectImage } from '../controllers/admin-media.controller.js';
+import { uploadCertificationAttachment, uploadProfilePhoto, uploadProjectImage, uploadProjectImages } from '../controllers/admin-media.controller.js';
 import { uploadResumeFile } from '../controllers/admin-resume.controller.js';
 import { listMessages, replyMessage, updateMessageStatus } from '../controllers/admin-message.controller.js';
 import { resumeUpload } from '../middleware/resume-upload.middleware.js';
@@ -45,6 +45,7 @@ for (const resource of resources) {
 }
 
 router.post('/projects/:id/image', projectImageUpload.single('image'), asyncHandler(uploadProjectImage));
+router.post('/projects/:id/images', projectImageUpload.array('images', 10), asyncHandler(uploadProjectImages));
 router.post('/certifications/:id/attachment', certificateUpload.single('certificate'), asyncHandler(uploadCertificationAttachment));
 
 router.get('/messages', validateQuery(messageQuerySchema), asyncHandler(listMessages));

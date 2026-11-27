@@ -28,13 +28,13 @@ function imageFilter(_req, file, callback) {
   return callback(null, true);
 }
 
-function createImageUpload(directory) {
+function createImageUpload(directory, maxFiles = 1) {
   return multer({
     storage: createStorage(directory),
     fileFilter: imageFilter,
-    limits: { files: 1, fileSize: 5 * 1024 * 1024 },
+    limits: { files: maxFiles, fileSize: 5 * 1024 * 1024 },
   });
 }
 
-export const projectImageUpload = createImageUpload(projectImagesDirectory);
+export const projectImageUpload = createImageUpload(projectImagesDirectory, 10);
 export const profilePhotoUpload = createImageUpload(profilePhotosDirectory);

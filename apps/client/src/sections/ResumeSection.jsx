@@ -3,9 +3,9 @@ import Reveal from "../components/Reveal";
 
 function ResumeSection({ resumeUrl }) {
   return (
-    <section id="resume" className="scroll-mt-28 px-6 py-12 sm:px-10 lg:px-16">
+    <section id="resume" className="scroll-mt-28 px-4 py-12 sm:px-10 lg:px-16">
       <Reveal>
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 overflow-hidden rounded-[2rem] border border-violet-300/20 bg-gradient-to-r from-violet-500/15 via-white/[0.04] to-cyan-400/10 sm:flex-row sm:items-center sm:p-5 lg:p-7">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 overflow-hidden rounded-[2rem] border border-violet-300/20 bg-gradient-to-r from-violet-500/15 via-white/[0.04] to-cyan-400/10 p-5 sm:flex-row sm:items-center sm:p-6 lg:p-7">
           <div className="flex items-start gap-4">
             <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/10 text-violet-100">
               <FileText size={21} aria-hidden="true" />
@@ -14,7 +14,7 @@ function ResumeSection({ resumeUrl }) {
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">
                 Resume
               </p>
-              <h2 className="mt-2 text-2xl font-semibold text-white">
+              <h2 className="mt-2 text-xl font-semibold text-white sm:text-2xl">
                 A concise version of the journey.
               </h2>
               <p className="mt-2 text-sm leading-7 text-slate-400">

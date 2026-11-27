@@ -20,10 +20,10 @@ function PortfolioNav({ activeSection = "top", content }) {
 
   return (
     <nav
-      className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8"
+      className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4 lg:px-8"
       aria-label="Primary navigation"
     >
-      <div className="mx-auto max-w-7xl rounded-2xl border border-white/10 bg-slate-950/75 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-xl sm:px-6">
+      <div className="mx-auto max-w-7xl rounded-2xl border border-white/10 bg-slate-950/75 px-3 py-2.5 shadow-2xl shadow-black/20 backdrop-blur-xl sm:px-6 sm:py-3">
         <div className="flex items-center justify-between">
           <Link
             to="/"
@@ -43,7 +43,7 @@ function PortfolioNav({ activeSection = "top", content }) {
               )}
               <span className="sr-only"> home</span>
             </span>
-            <span>Gurbhej Singh</span>
+            <span className="truncate">Gurbhej Singh</span>
           </Link>
           <div className="hidden items-center gap-7 md:flex">
             {navigation.map(([label, id]) => (

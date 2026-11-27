@@ -24,7 +24,7 @@ function DateRange({ startDate, endDate, current }) {
   if (!startDate && !endDate && !current)
     return <span className="text-xs text-amber-200/70">[Add duration]</span>;
   return (
-    <span className="inline-flex items-center gap-2 text-xs text-slate-500">
+    <span className="inline-flex flex-wrap items-center gap-2 text-xs text-slate-500">
       <CalendarDays size={13} aria-hidden="true" />
       {startDate || "[Start date]"} —{" "}
       {current ? "Present" : endDate || "[End date]"}
@@ -45,12 +45,12 @@ function ExperienceTimeline({ experience }) {
   return (
     <ol className="relative ml-2 border-l border-violet-300/20">
       {experience.map((item) => (
-        <li key={item._id} className="relative pb-10 pl-8 last:pb-0">
+        <li key={item._id} className="relative min-w-0 pb-10 pl-6 last:pb-0 sm:pl-8">
           <span
             className="absolute -left-[7px] top-1 h-3 w-3 rounded-full border-2 border-[#111827] bg-cyan-300 shadow-[0_0_16px_rgba(103,232,249,.7)]"
             aria-hidden="true"
           />
-          <div className="rounded-2xl border border-white/10 bg-slate-950/25 p-5 transition hover:border-violet-300/30">
+          <div className="min-w-0 rounded-2xl border border-white/10 bg-slate-950/25 p-4 transition hover:border-violet-300/30 sm:p-5">
             <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
               <div>
                 <h4 className="text-base font-semibold text-white">
@@ -223,7 +223,7 @@ function JourneySection({ experience, education, certifications }) {
   return (
     <section
       id="journey"
-      className="scroll-mt-28 border-t border-white/10 px-6 pt-14 sm:px-10 lg:px-16"
+      className="scroll-mt-28 border-t border-white/10 px-4 pt-14 sm:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
         <Reveal>

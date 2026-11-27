@@ -94,16 +94,59 @@ export async function uploadProjectImage(req, res) {
 
   const imageUrl = publicMediaUrl(req, 'projects', req.file.filename);
   try {
+    const existingImages = Array.isArray(project.images) ? project.images : [];
+    const images = [...new Set([
+      ...existingImages,
+      project.imageUrl,
+      imageUrl,
+    ].filter(Boolean))];
     const updatedProject = await Project.findByIdAndUpdate(
       req.params.id,
-      { $set: { imageUrl } },
+      { $set: { imageUrl, thumbnail: imageUrl, images } },
       { new: true, runValidators: true },
     ).lean();
     const previousFile = localMediaPath(project.imageUrl, 'projects', projectImagesDirectory);
-    if (previousFile && previousFile !== req.file.path) await unlink(previousFile).catch(() => {});
+    if (previousFile && previousFile !== req.file.path && !images.includes(project.imageUrl)) {
+      await unlink(previousFile).catch(() => {});
+    }
     return res.json({ success: true, data: updatedProject });
   } catch (error) {
     await unlink(req.file.path).catch(() => {});
+    throw error;
+  }
+}
+
+export async function uploadProjectImages(req, res) {
+  const files = req.files || [];
+  if (!files.length) throw new AppError('Please choose at least one project image to upload.', 400);
+
+  const project = await Project.findById(req.params.id).lean();
+  if (!project) {
+    await Promise.all(files.map((file) => unlink(file.path).catch(() => {})));
+    throw new AppError('Project not found.', 404);
+  }
+
+  try {
+    for (const file of files) await validateUploadedImage(file);
+
+    const imageUrls = files.map((file) => publicMediaUrl(req, 'projects', file.filename));
+    const existingImages = Array.isArray(project.images) ? project.images : [];
+    const images = [...new Set([
+      ...existingImages,
+      project.imageUrl,
+      project.thumbnail,
+      ...imageUrls,
+    ].filter(Boolean))];
+    const thumbnail = project.thumbnail || project.imageUrl || imageUrls[0];
+    const updatedProject = await Project.findByIdAndUpdate(
+      req.params.id,
+      { $set: { imageUrl: project.imageUrl || thumbnail, thumbnail, images } },
+      { new: true, runValidators: true },
+    ).lean();
+
+    return res.json({ success: true, data: updatedProject });
+  } catch (error) {
+    await Promise.all(files.map((file) => unlink(file.path).catch(() => {})));
     throw error;
   }
 }

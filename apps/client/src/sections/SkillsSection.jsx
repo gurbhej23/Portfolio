@@ -108,7 +108,7 @@ function SkillsSection({ skills }) {
   return (
     <section
       id="skills"
-      className="scroll-mt-28 border-t border-white/10 px-6 pb-14 pt-14 sm:px-10 lg:px-16"
+      className="scroll-mt-28 border-t border-white/10 px-4 pb-14 pt-14 sm:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
         <Reveal>
@@ -132,7 +132,7 @@ function SkillsSection({ skills }) {
                 aria-selected={selectedCategory === category}
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`rounded-full border px-4 py-2 text-sm capitalize transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 ${selectedCategory === category ? "border-violet-200/50 bg-violet-200/10 text-violet-100" : "border-white/10 text-slate-400 hover:border-white/25 hover:text-white cursor-pointer"}`}
+                className={`inline-flex max-w-full cursor-pointer items-center rounded-full border px-4 py-2 text-sm capitalize transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 ${selectedCategory === category ? "border-violet-200/50 bg-violet-200/10 text-violet-100" : "border-white/10 text-slate-400 hover:border-white/25 hover:text-white"}`}
               >
                 {category}
               </button>
@@ -160,7 +160,7 @@ function SkillsSection({ skills }) {
                   exit={{ opacity: 0, scale: 0.96 }}
                   transition={{ duration: 0.28, delay: index * 0.025 }}
                   whileHover={{ y: -6 }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-5 transition-colors hover:border-violet-300/30 hover:bg-white/[0.06] focus-within:border-cyan-300/40"
+                  className="group relative min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition-colors hover:border-violet-300/30 hover:bg-white/[0.06] focus-within:border-cyan-300/40 sm:p-5"
                 >
                   <div className="absolute -right-12 -top-12 h-28 w-28 rounded-full bg-violet-400/10 blur-2xl transition duration-500 group-hover:bg-cyan-300/15" />
                   <div className="relative flex items-start justify-between gap-4">

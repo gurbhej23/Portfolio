@@ -73,11 +73,11 @@ function HeroSection({ content }) {
   return (
     <section
       id="top"
-      className="relative flex min-h-screen items-center overflow-hidden px-6 pb-5 pt-26 sm:px-10 lg:px-16"
+      className="relative flex min-h-screen items-center overflow-hidden px-4 pb-8 pt-28 sm:px-6 sm:pb-20 lg:px-16 lg:pb-8"
     >
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-50" />
       <motion.div
-        className="pointer-events-none absolute -left-40 top-24 h-[30rem] w-[30rem] rounded-full bg-violet-600/20 blur-3xl"
+        className="pointer-events-none absolute -left-40 top-24 h-[20rem] w-[20rem] rounded-full bg-violet-600/20 blur-3xl sm:h-[30rem] sm:w-[30rem]"
         animate={
           reducedMotion
             ? undefined
@@ -86,7 +86,7 @@ function HeroSection({ content }) {
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="pointer-events-none absolute -right-40 bottom-0 h-[34rem] w-[34rem] rounded-full bg-cyan-400/10 blur-3xl"
+        className="pointer-events-none absolute -right-40 bottom-0 h-[22rem] w-[22rem] rounded-full bg-cyan-400/10 blur-3xl sm:h-[34rem] sm:w-[34rem]"
         animate={
           reducedMotion
             ? undefined
@@ -100,8 +100,8 @@ function HeroSection({ content }) {
         }}
       />
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-px w-3/4 -translate-x-1/2 to-transparent" />
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-16 lg:grid-cols-[1.25fr_0.75fr] lg:items-center">
-        <div>
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)] lg:items-center lg:gap-16">
+        <div className="order-2 lg:order-1">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -113,7 +113,7 @@ function HeroSection({ content }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
-            className="max-w-4xl text-5xl font-semibold tracking-tight text-white sm:text-7xl lg:text-8xl"
+            className="max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-8xl"
           >
             {hero.headline}
           </motion.h1>
@@ -121,7 +121,7 @@ function HeroSection({ content }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.16 }}
-            className="mt-5 flex min-h-12 flex-wrap items-center gap-3 text-2xl font-medium text-slate-300 sm:min-h-16 sm:text-4xl"
+            className="mt-4 flex min-h-12 flex-wrap items-center gap-3 text-xl font-medium text-slate-300 sm:min-h-16 sm:text-3xl lg:text-4xl"
           >
             {reducedMotion ? (
               <span
@@ -157,7 +157,7 @@ function HeroSection({ content }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.24 }}
-            className="mt-8 max-w-2xl"
+            className="mt-3 max-w-2xl"
           >
             <motion.div
               id="hero-introduction"
@@ -171,7 +171,7 @@ function HeroSection({ content }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
-                  className={`text-lg leading-8 ${isPlaceholder(introduction) ? "text-amber-200/80" : "text-slate-300"}`}
+                  className={`text-base leading-7 sm:text-lg sm:leading-8 ${isPlaceholder(introduction) ? "text-amber-200/80" : "text-slate-300"}`}
                 >
                   {visibleIntroduction}
                   {introductionHasMore && (
@@ -198,13 +198,13 @@ function HeroSection({ content }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.32 }}
-            className="mt-10 flex flex-wrap items-center gap-4"
+            className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
           >
             <a
               href={primaryCtaUrl}
               target={primaryCtaIsExternal ? "_blank" : undefined}
               rel={primaryCtaIsExternal ? "noreferrer" : undefined}
-              className="group inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80 sm:w-auto"
             >
               {primaryCtaLabel}
               <ArrowRight
@@ -216,19 +216,19 @@ function HeroSection({ content }) {
             <a
               href={resumeDownloadUrl}
               download={resumeUrl ? "gurbhej-singh-resume.pdf" : undefined}
-              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-violet-300/70 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/80"
+              className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-violet-300/70 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/80 sm:w-auto"
             >
               Download Resume
               <ArrowDown size={16} aria-hidden="true" />
             </a>
           </motion.div>
           <div
-            className="mt-10 flex flex-wrap items-center gap-3"
+            className="mt-10 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
             aria-label="Professional links"
           >
-            <span className="mr-2 text-xs uppercase tracking-[0.2em] text-slate-500">
+            {/* <span className="mr-2 text-xs uppercase tracking-[0.2em] text-slate-500">
               Connect
-            </span>
+            </span> */}
             {roleLinks.map(({ label, url, icon: Icon }) =>
               url ? (
                 <a
@@ -258,16 +258,18 @@ function HeroSection({ content }) {
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
-          className="relative mx-auto w-full max-w-sm"
+          className="relative order-1 mx-auto w-full max-w-xs sm:max-w-sm lg:order-2"
         >
-          <div className="absolute -inset-5 rounded-4xl bg-linear-to-br from-violet-500/20 via-transparent to-cyan-400/20 blur-2xl" />
-          <div className="relative overflow-hidden rounded-4xl border border-white/10 bg-white/4.5 p-3 shadow-2xl shadow-violet-950/30 backdrop-blur-sm">
+          <div className="absolute -inset-5 rounded-[2rem] bg-gradient-to-br from-violet-500/20 via-transparent to-cyan-400/20 blur-2xl" />
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] p-3 shadow-2xl shadow-violet-950/30 backdrop-blur-sm">
             {profilePhotoUrl && !photoError ? (
               <img
                 src={profilePhotoUrl}
                 alt="Gurbhej Singh"
+                loading="eager"
+                fetchPriority="high"
                 onError={() => setPhotoError(true)}
-                className="aspect-4/5 w-full rounded-3xl object-cover"
+                className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
               />
             ) : (
               <div className="relative flex aspect-[4/5] flex-col items-center justify-center overflow-hidden rounded-[1.5rem] border border-dashed border-violet-200/30 bg-gradient-to-br from-violet-950/80 via-slate-900 to-cyan-950/70">

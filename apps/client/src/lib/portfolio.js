@@ -94,10 +94,23 @@ export function normalizePortfolio(payload = {}) {
       profilePhotoUrl: resolveMediaUrl(content.profilePhotoUrl || ''),
       socialLinks: content.socialLinks || [],
     },
-    projects: (payload.projects?.length ? payload.projects : fallbackProjects).map((project) => ({
-      ...project,
-      imageUrl: resolveMediaUrl(project.imageUrl),
-    })),
+    projects: (payload.projects?.length ? payload.projects : fallbackProjects).map((project) => {
+      const thumbnail = resolveMediaUrl(project.thumbnail || project.imageUrl || '');
+      const images = [...new Set([
+        thumbnail,
+        ...(Array.isArray(project.images) ? project.images : []),
+      ].map(resolveMediaUrl).filter(Boolean))];
+
+      return {
+        ...project,
+        imageUrl: resolveMediaUrl(project.imageUrl || thumbnail),
+        thumbnail,
+        images,
+        shortDescription: project.shortDescription || project.summary || '',
+        fullDescription: project.fullDescription || project.description || '',
+        liveDemoUrl: project.liveDemoUrl || project.liveUrl || '',
+      };
+    }),
     skills: payload.skills?.length ? payload.skills : fallbackSkills,
     experience: payload.experience || [],
     education: payload.education || [],
