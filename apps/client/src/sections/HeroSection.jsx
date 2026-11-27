@@ -105,7 +105,7 @@ function HeroSection({ content }) {
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[0.875rem] font-semibold uppercase tracking-[0.32em] text-cyan-300"
+            className="text-[1.25rem] font-semibold uppercase tracking-[0.32em] text-cyan-300"
           >
             Hello, I&apos;m
           </motion.p>
@@ -113,7 +113,7 @@ function HeroSection({ content }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
-            className="max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-8xl"
+            className="max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl"
           >
             {hero.headline}
           </motion.h1>
@@ -267,7 +267,7 @@ function HeroSection({ content }) {
                 src={profilePhotoUrl}
                 alt="Gurbhej Singh"
                 loading="eager"
-                fetchPriority="high"
+                fetchpriority="high"
                 onError={() => setPhotoError(true)}
                 className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
               />

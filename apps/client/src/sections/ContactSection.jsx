@@ -130,9 +130,9 @@ function ContactSection({ contact }) {
           <SectionHeading
             eyebrow="Contact"
             title="Have a good problem to solve?"
-            description="Send a message through the form. It is validated, rate-limited, sanitized, and stored securely by the API."
+            description="Send a message through the form."
           />
-          <div className="mt-10 space-y-5">
+          <div className="mt-4 space-y-5">
             {contact.email && (
               <a
                 href={emailHref}

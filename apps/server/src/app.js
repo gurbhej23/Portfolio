@@ -40,6 +40,8 @@ app.use(
     limit: 120,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
+    // React Strict Mode and Vite reloads can repeat requests during local development.
+    skip: () => env.NODE_ENV !== 'production',
   }),
 );
 app.use(express.json({ limit: '100kb' }));

@@ -87,6 +87,50 @@ const skillIcons = {
   DeepFace: BrainCircuit,
 };
 
+const skillDescriptions = {
+  "Django REST Framework": "A toolkit for building web APIs with Django.",
+  "Prompt Engineering": "The practice of designing prompts for useful and reliable AI responses.",
+  "AI-Assisted Development": "Using AI tools to support coding, debugging, and software development.",
+  "JWT Authentication": "Token-based authentication for securely protecting application routes and APIs.",
+  "Python OOPs": "Object-oriented programming in Python for organizing reusable application code.",
+  Python: "A versatile programming language for web development, automation, data, and AI.",
+  JavaScript: "A programming language for interactive web applications and full-stack development.",
+  TypeScript: "A typed superset of JavaScript for building reliable applications.",
+  "JavaScript/TypeScript": "Languages for building typed, scalable, and interactive web applications.",
+  "React.js": "A JavaScript library for building reusable user interfaces.",
+  HTML: "A markup language for structuring web page content.",
+  HTML5: "The modern HTML standard for structuring web content and browser features.",
+  CSS: "A stylesheet language for designing responsive web interfaces.",
+  CSS3: "The modern CSS standard for styling responsive web interfaces.",
+  React: "A JavaScript library for building reusable user interfaces.",
+  "Tailwind CSS": "A utility-first CSS framework for styling responsive interfaces.",
+  "Node.js": "A JavaScript runtime for server-side development.",
+  "Express.js": "A Node.js framework for building web servers and REST APIs.",
+  "Socket.io": "A library for real-time, bidirectional communication between applications.",
+  MongoDB: "A NoSQL database for storing flexible, document-based data.",
+  Mongoose: "An ODM library for modeling and accessing MongoDB data.",
+  SQLite: "A lightweight relational database stored in a local file.",
+  PostgreSQL: "An open-source relational database for structured application data.",
+  NumPy: "A Python library for numerical computing with multidimensional arrays.",
+  Pandas: "A Python library for data cleaning, analysis, and tabular manipulation.",
+  Matplotlib: "A Python library for creating charts and data visualizations.",
+  Django: "A Python framework for building secure web applications.",
+  "Next.js": "A React framework for building full-stack and server-rendered web applications.",
+  "REST APIs": "A standard way for applications to communicate through HTTP endpoints.",
+  MERN: "A JavaScript stack combining MongoDB, Express, React, and Node.js.",
+  SendGrid: "An email delivery service for sending transactional messages.",
+  Git: "A version control system for tracking code changes.",
+  GitHub: "A platform for hosting repositories and collaborating on code.",
+  Vercel: "A cloud platform for deploying and scaling frontend applications.",
+  Render: "A cloud platform for hosting web services and applications.",
+  "Antigravity Agent": "An AI development agent for assisted coding workflows.",
+  Postman: "A tool for testing and debugging APIs.",
+  "VS Code": "A code editor for writing, debugging, and managing projects.",
+  JWT: "A token format for securely authenticating API requests.",
+  OpenCV: "A computer vision library for image processing and analysis.",
+  DeepFace: "A Python framework for face recognition and facial analysis.",
+};
+
 function SkillsSection({ skills }) {
   const [activeCategory, setActiveCategory] = useState("");
   const categories = useMemo(() => {
@@ -151,6 +195,8 @@ function SkillsSection({ skills }) {
               const meta = categoryMeta[category] || categoryMeta.Others;
               const CategoryIcon = meta.icon;
               const SkillIcon = skillIcons[skill.name] || CategoryIcon;
+              const skillDescription =
+                skillDescriptions[skill.name] || skill.description || meta.description;
               return (
                 <motion.article
                   layout
@@ -178,15 +224,8 @@ function SkillsSection({ skills }) {
                     {skill.name}
                   </h3>
                   <p className="relative mt-2 text-sm leading-6 text-slate-500">
-                    {meta.description}
+                    {skillDescription}
                   </p>
-                  <div className="relative mt-5 flex items-center gap-2 text-xs text-slate-500">
-                    <span
-                      className="h-1.5 w-1.5 rounded-full bg-cyan-300/70"
-                      aria-hidden="true"
-                    />
-                    No percentage score shown
-                  </div>
                 </motion.article>
               );
             })}
