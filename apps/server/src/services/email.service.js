@@ -47,28 +47,34 @@ async function sendViaResend({ to, from, subject, text, replyTo }) {
 }
 
 export async function sendContactNotification(contactMessage) {
-  if (env.RESEND_API_KEY && env.CONTACT_RECEIVER) {
-    return sendViaResend({
-      to: env.CONTACT_RECEIVER,
-      replyTo: contactMessage.email,
-      subject: `[Portfolio contact] ${contactMessage.subject || 'New message'}`,
-      text: [
-        `Name: ${contactMessage.name}`,
-        `Email: ${contactMessage.email}`,
-        `Subject: ${contactMessage.subject || '(none)'}`,
-        '',
-        contactMessage.message,
-      ].join('\n'),
-    });
-  }
+  const receiver = env.CONTACT_RECEIVER || env.SMTP_USER;
 
   const mailTransporter = getTransporter();
-  if (!mailTransporter || !env.CONTACT_RECEIVER) return { status: 'not_configured', error: '' };
+  if (mailTransporter && receiver) {
+    try {
+      await mailTransporter.sendMail({
+        from: env.SMTP_FROM || env.SMTP_USER,
+        to: receiver,
+        replyTo: contactMessage.email,
+        subject: `[Portfolio contact] ${contactMessage.subject || 'New message'}`,
+        text: [
+          `Name: ${contactMessage.name}`,
+          `Email: ${contactMessage.email}`,
+          `Subject: ${contactMessage.subject || '(none)'}`,
+          '',
+          contactMessage.message,
+        ].join('\n'),
+      });
+      return { status: 'sent', error: '' };
+    } catch (error) {
+      console.error('Contact notification email failed:', error.message);
+      return { status: 'failed', error: error.message.slice(0, 500) };
+    }
+  }
 
-  try {
-    await mailTransporter.sendMail({
-      from: env.SMTP_FROM || env.SMTP_USER,
-      to: env.CONTACT_RECEIVER,
+  if (env.RESEND_API_KEY && receiver) {
+    return sendViaResend({
+      to: receiver,
       replyTo: contactMessage.email,
       subject: `[Portfolio contact] ${contactMessage.subject || 'New message'}`,
       text: [
@@ -79,11 +85,9 @@ export async function sendContactNotification(contactMessage) {
         contactMessage.message,
       ].join('\n'),
     });
-    return { status: 'sent', error: '' };
-  } catch (error) {
-    console.error('Contact notification email failed:', error.message);
-    return { status: 'failed', error: error.message.slice(0, 500) };
   }
+
+  return { status: 'not_configured', error: '' };
 }
 
 export async function sendReplyEmail({ to, subject, replyText, originalMessage }) {

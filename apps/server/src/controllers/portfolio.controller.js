@@ -11,12 +11,17 @@ export async function getPortfolio(req, res) {
     Certification.find().sort({ order: 1, issueDate: -1 }).lean(),
   ]);
 
-  const publicApiUrl = (env.PUBLIC_API_URL || `${req.protocol}://${req.get('host')}`).replace(/\/+$/, '');
+  const requestApiUrl = `${req.protocol}://${req.get('host')}`.replace(/\/+$/, '');
+  const configuredApiUrl = (env.PUBLIC_API_URL || '').replace(/\/api\/?$/i, '').replace(/\/+$/, '');
+  const configuredUrlIsLocal = /^https?:\/\/(localhost|127\.0\.0\.1)(?::\d+)?$/i.test(configuredApiUrl);
+  const publicApiUrl = (configuredApiUrl && !(env.NODE_ENV === 'production' && configuredUrlIsLocal)
+    ? configuredApiUrl
+    : requestApiUrl);
 
   const replaceLocalhost = (url) => {
     if (!url || typeof url !== 'string') return url;
-    if (url.includes('localhost:5000')) {
-      return url.replace(/^https?:\/\/localhost:5000/i, publicApiUrl);
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(?::\d+)?/i.test(url)) {
+      return url.replace(/^https?:\/\/(localhost|127\.0\.0\.1)(?::\d+)?/i, publicApiUrl);
     }
     if (url.startsWith('/uploads/')) {
       return `${publicApiUrl}${url}`;
@@ -32,6 +37,8 @@ export async function getPortfolio(req, res) {
   const normalizedProjects = projects.map((p) => ({
     ...p,
     imageUrl: replaceLocalhost(p.imageUrl),
+    thumbnail: replaceLocalhost(p.thumbnail),
+    images: Array.isArray(p.images) ? p.images.map(replaceLocalhost) : [],
   }));
 
   const normalizedCertifications = certifications.map((c) => ({

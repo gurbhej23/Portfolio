@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, LoaderCircle, LockKeyhole, LogIn } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, LoaderCircle, LockKeyhole, LogIn } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -10,6 +10,7 @@ function AdminLoginPage() {
   const location = useLocation();
   const [form, setForm] = useState({ email: "", password: "" });
   const [state, setState] = useState({ loading: false, error: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const reducedMotion = useReducedMotion();
 
   if (user) return <Navigate to="/admin" replace />;
@@ -51,16 +52,10 @@ function AdminLoginPage() {
           <ArrowLeft size={14} aria-hidden="true" />
           Back to portfolio
         </Link>
-        <div className="mt-10 grid h-12 w-12 place-items-center rounded-2xl bg-violet-500/15 text-violet-200">
-          <LockKeyhole size={22} aria-hidden="true" />
-        </div>
-        <p className="mt-7 text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">
-          Secure workspace
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-          Welcome back.
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white text-center sm:text-4xl">
+          Welcome
         </h1>
-        <p className="mt-4 text-sm leading-7 text-slate-400">
+        <p className="mt-2 text-sm leading-7 text-slate-400">
           Sign in to manage portfolio content, projects, and messages.
         </p>
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
@@ -79,24 +74,35 @@ function AdminLoginPage() {
           </label>
           <label className="grid gap-2 text-sm text-slate-300">
             Password
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={updateField}
-              required
-              autoComplete="current-password"
-              className="rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-300/60"
-              placeholder="Your password"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={updateField}
+                required
+                autoComplete="current-password"
+                className="w-full rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3 pr-12 text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-300/60"
+                placeholder="Your password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((visible) => !visible)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute inset-y-0 right-0 grid w-12 place-items-center text-slate-500 transition hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300/70"
+              >
+                {showPassword ? (
+                  <EyeOff size={17} aria-hidden="true" />
+                ) : (
+                  <Eye size={17} aria-hidden="true" />
+                )}
+              </button>
+            </div>
           </label>
-          <p aria-live="polite" className="min-h-5 text-sm text-rose-300">
-            {state.error}
-          </p>
           <button
             type="submit"
             disabled={state.loading}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:cursor-wait disabled:opacity-60"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white mt-4 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-100 disabled:cursor-wait disabled:opacity-60"
           >
             {state.loading ? (
               <LoaderCircle
@@ -110,6 +116,9 @@ function AdminLoginPage() {
             Sign in
           </button>
         </form>
+          <p aria-live="polite" className="min-h-5 text-sm text-rose-300">
+            {state.error}
+          </p>
       </motion.div>
     </main>
   );

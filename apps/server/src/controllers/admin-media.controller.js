@@ -33,7 +33,12 @@ async function hasValidPdfSignature(filePath) {
 }
 
 function publicMediaUrl(req, directoryName, filename) {
-  const baseUrl = (env.PUBLIC_API_URL || `${req.protocol}://${req.get('host')}`).replace(/\/+$/, '');
+  const requestBaseUrl = `${req.protocol}://${req.get('host')}`.replace(/\/+$/, '');
+  const configuredBaseUrl = (env.PUBLIC_API_URL || '').replace(/\/api\/?$/i, '').replace(/\/+$/, '');
+  const configuredUrlIsLocal = /^https?:\/\/(localhost|127\.0\.0\.1)(?::\d+)?$/i.test(configuredBaseUrl);
+  const baseUrl = configuredBaseUrl && !(env.NODE_ENV === 'production' && configuredUrlIsLocal)
+    ? configuredBaseUrl
+    : requestBaseUrl;
   return new URL(`/uploads/${directoryName}/${encodeURIComponent(filename)}`, `${baseUrl}/`).toString();
 }
 

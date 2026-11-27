@@ -59,8 +59,8 @@ export function resolveMediaUrl(url) {
     : (typeof process !== 'undefined' && process.env && process.env.PUBLIC_API_URL) || 'http://localhost:5000/api';
   const serverOrigin = rawApi.replace(/\/api\/?$/, '').replace(/\/+$/, '');
 
-  if (url.includes('localhost:5000')) {
-    return url.replace(/^https?:\/\/localhost:5000/i, serverOrigin);
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(?::\d+)?/i.test(url)) {
+    return url.replace(/^https?:\/\/(localhost|127\.0\.0\.1)(?::\d+)?/i, serverOrigin);
   }
   if (url.startsWith('/uploads/')) {
     return `${serverOrigin}${url}`;

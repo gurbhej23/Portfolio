@@ -1,4 +1,5 @@
 import { AlertTriangle, LoaderCircle } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import PortfolioNav from "../components/PortfolioNav";
 import HeroSection from "../sections/HeroSection";
 import AboutSection from "../sections/AboutSection";
@@ -32,16 +33,33 @@ function PortfolioPage({ data, loading, apiError }) {
           being shown.
         </div>
       )}
-      {loading && (
-        <div className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-950/80 px-4 py-2 text-xs text-slate-300 shadow-xl backdrop-blur">
-          <LoaderCircle
-            size={14}
-            className="animate-spin text-cyan-300"
-            aria-hidden="true"
-          />
-          Loading content
-        </div>
-      )}
+      <AnimatePresence>
+        {loading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            role="status"
+            aria-live="polite"
+            className="fixed inset-0 z-[100] grid place-items-center bg-slate-950/65 p-6 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 12, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.98 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="flex min-w-48 flex-col items-center rounded-3xl border border-white/15 bg-slate-950/80 px-8 py-7 text-center shadow-2xl shadow-black/40"
+            >
+              <span className="grid h-12 w-12 place-items-center rounded-2xl border border-cyan-200/20 bg-cyan-200/10 text-cyan-200">
+                <LoaderCircle size={22} className="animate-spin" aria-hidden="true" />
+              </span>
+              <p className="mt-4 text-sm font-semibold text-white">Loading portfolio</p>
+              <p className="mt-1 text-xs text-slate-400">Preparing the latest content…</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <main>
         <HeroSection content={data.content} />
         <SkillsSection skills={data.skills} />
